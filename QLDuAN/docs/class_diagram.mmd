@@ -1,0 +1,48 @@
+classDiagram
+    class Employee {
+        -str _id
+        -str _fullName
+        -int|float _baseSalary
+        +Employee(id, fullName, baseSalary)
+        +id str
+        +fullName str
+        +baseSalary int|float
+        +increaseSalary(value, byPercentage) None
+        +calculateMonthlyCost() int|float
+        +displayInfo() None
+        +close() None
+    }
+
+    class SoftwareEngineer {
+        -str _primaryLanguage
+        -int|float _technicalAllowance
+        +SoftwareEngineer(id, fullName, primaryLanguage, baseSalary, technicalAllowance)
+        +primaryLanguage str
+        +technicalAllowance int|float
+        +calculateMonthlyCost() int|float
+        +displayInfo() None
+        +close() None
+    }
+
+    class ProjectTeam {
+        -str _projectCode
+        -str _projectName
+        -dict _members
+        -weakref _leader_ref
+        +ProjectTeam(projectCode, projectName, leader)
+        +projectCode str
+        +projectName str
+        +leader Employee|None
+        +members tuple~Employee~
+        +addMember(employee, makeLeader) bool
+        +removeMember(employeeId) bool
+        +changeLeader(employee) None
+        +contains(employeeId) bool
+        +calculateTotalMonthlyCost() int|float
+        +displayTeam() None
+        +close() None
+    }
+
+    SoftwareEngineer --|> Employee : kế thừa
+    ProjectTeam "0..*" o-- "0..*" Employee : members, kết tập không sở hữu
+    ProjectTeam "0..*" o-- "0..1" Employee : leader, kết tập không sở hữu
