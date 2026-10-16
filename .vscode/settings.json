@@ -5,5 +5,7 @@
             "envManager": "ms-python.python:venv",
             "packageManager": "ms-python.python:pip"
         }
-    ]
+    ],
+    "java.project.sourcePaths": ["Bài 4/src", "Bài 5/src"],
+    "java.project.outputPath": "out"
 }
