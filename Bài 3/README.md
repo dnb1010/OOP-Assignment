@@ -1,42 +1,47 @@
-# Bài 3: Quản lý nhân sự dự án
+# Bài 3 — Quản lý nhân sự dự án
 
-Chương trình minh họa lập trình hướng đối tượng bằng Python với ba lớp `Employee`, `SoftwareEngineer` và `ProjectTeam`.
+Chương trình Python mô hình hóa nhân sự dự án, trong đó kỹ sư phần mềm là một loại nhân viên và nhóm dự án tập hợp nhân viên cùng một trưởng nhóm. Mã nguồn nằm trong `employee.py`, `software_engineer.py`, `project_team.py` và `main.py`.
 
-## Yêu cầu
+## Mô hình lớp
 
-- Python 3.10 trở lên.
-- Không cần cài thêm thư viện.
+### `employee.py`: kiểm tra dữ liệu và `Employee`
 
-## Chạy chương trình
+- `check_text(value, field_name)` yêu cầu chuỗi không rỗng sau khi trim và trả về chuỗi đã trim.
+- `check_number(value, field_name, positive=False)` chỉ nhận `int`/`float` hữu hạn, từ chối `bool`; giá trị mặc định phải không âm, còn `positive=True` yêu cầu lớn hơn 0. Giá trị trả về là `float`.
+- `Employee` lưu mã, họ tên và lương cơ bản trong thuộc tính private. Mã và tên bắt buộc không rỗng; lương không âm.
+- Các property `employeeId`, `id`, `fullName`, `baseSalary` cung cấp quyền đọc. `id` là bí danh của `employeeId`.
+- `increaseSalary(value, byPercentage=False)` tăng theo số tiền cố định hoặc theo tỷ lệ phần trăm. Mức tăng phải lớn hơn 0; `byPercentage` phải là boolean. Sau khi tính, lương mới được xác nhận hữu hạn.
+- `calculateMonthlyCost()` trả về lương cơ bản. `calculateMontlyCost()` giữ tên cũ bị thiếu chữ “h” và chuyển tiếp sang method đúng.
+- `displayInfo()` in dữ liệu nhân viên. Destructor in thông báo khi đối tượng bị thu gom.
 
-Mở terminal tại thư mục `Bài 3`.
+### `software_engineer.py`: `SoftwareEngineer(Employee)`
 
-Chạy phần demo có sẵn:
+Constructor gọi constructor lớp cha rồi thêm ngôn ngữ chính (bắt buộc có nội dung) và phụ cấp kỹ thuật (không âm). `calculateMonthlyCost()` trả về lương cơ bản cộng phụ cấp. `displayInfo()` hiển thị thêm ngôn ngữ và chi phí. Lớp cũng cung cấp alias `calculateMontlyCost()`.
 
-```powershell
-python main.py
-```
+### `project_team.py`: `ProjectTeam`
 
-Để nhập thông tin dự án và nhân sự từ bàn phím:
+- Mã/tên dự án được kiểm tra bằng `check_text`.
+- Thành viên được lưu trong từ điển theo mã nhân viên; mỗi giá trị là `weakref`, nên nhóm không sở hữu mạnh vòng đời của nhân viên. Bên gọi cần giữ tham chiếu mạnh đến nhân viên nếu muốn họ luôn còn trong nhóm.
+- `members` trả về tuple snapshot, `leader` trả về trưởng nhóm hoặc `None`, `contains()` kiểm tra mã.
+- `addMember(employee, makeLeader=False)` chỉ nhận `Employee`. Mã trùng bị từ chối; thêm đúng cùng một đối tượng đã có cũng trả về `False`, trừ khi yêu cầu đặt chính đối tượng đó làm trưởng nhóm.
+- `removeMember(id)` trả về `False` nếu không có mã hoặc nhân viên đang là trưởng nhóm; không tự xóa/đổi trưởng nhóm.
+- `changeLeader(employee)` đặt trưởng nhóm; nếu nhân viên chưa có trong nhóm thì tự thêm. Một đối tượng khác có cùng mã sẽ bị từ chối.
+- `calculateTotalMonthlyCost()` cộng `calculateMonthlyCost()` của thành viên, do đó chi phí kỹ sư được tính qua đa hình.
+- `displayTeam()` in thông tin dự án, trưởng nhóm, danh sách và tổng chi phí.
+
+## `main.py`: hai cách chạy
+
+- Khi chạy `python main.py`, chương trình gọi `demo()`. Demo dùng `assert` để kiểm tra tăng lương, thành viên trùng, đổi/xóa trưởng nhóm, đa hình, tổng chi phí và các trường hợp dữ liệu không hợp lệ.
+- `main()` là luồng nhập liệu tương tác: nhập dự án, số thành viên, loại nhân sự, lương và dữ liệu kỹ sư nếu cần; sau đó có thể chọn trưởng nhóm. Để gọi luồng này:
 
 ```powershell
 python -c "import main; main.main()"
 ```
 
-Chương trình nhập mã và tên dự án, số lượng nhân sự, loại nhân sự, thông tin lương và mã trưởng nhóm. Với kỹ sư phần mềm, chương trình cũng hỏi ngôn ngữ lập trình và phụ cấp kỹ thuật. Nhấn Enter ở lời nhắc mã trưởng nhóm để tạo nhóm chưa có trưởng nhóm.
+Chạy demo tại thư mục này:
 
-## Nội dung minh họa
+```powershell
+python main.py
+```
 
-- Khởi tạo nhân viên và kỹ sư phần mềm.
-- Tăng lương theo số tiền hoặc theo phần trăm.
-- Thêm thành viên, đổi trưởng nhóm và ngăn mã nhân sự trùng.
-- Không cho xóa trưởng nhóm hiện tại.
-- Tính chi phí hàng tháng bằng đa hình.
-- Kiểm tra dữ liệu không hợp lệ và một số trường hợp biên.
-
-## Các tệp
-
-- `employee.py`: lớp `Employee` và kiểm tra dữ liệu đầu vào.
-- `software_engineer.py`: lớp `SoftwareEngineer`, kế thừa `Employee`.
-- `project_team.py`: quản lý thành viên, trưởng nhóm và tổng chi phí dự án.
-- `main.py`: demo có sẵn và luồng nhập dữ liệu từ bàn phím.
+Yêu cầu Python 3.10 trở lên do mã dùng union type `|`. Không cần thư viện ngoài.
