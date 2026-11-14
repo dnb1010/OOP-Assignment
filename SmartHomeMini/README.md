@@ -1,12 +1,19 @@
 # Smart Home Mini (Java) - Factory, Singleton, Facade
 
 ## Chay chuong trinh
+Du an nay khong dung package, nen compile va chay theo ten file goc trong `src/` va `test/`.
+
 ```bash
-javac -d out src/smarthome/*.java test/smarthome/*.java
-java -cp out smarthome.Main            # demo
-java -cp out smarthome.SmartHomeTests  # kiem thu T1-T5
+# 1) Compile source va test
+javac -d bin src/*.java test/SmartHomeTests.java
+
+# 2) Chay demo chuong trinh
+java -cp bin App
+
+# 3) Chay test T1-T5
+java -cp bin SmartHomeTests
 ```
-Yeu cau: JDK 17+ (dung switch expression).
+Yeu cau: JDK 17+.
 
 ## So do lop (Mermaid)
 ```mermaid
